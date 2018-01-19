@@ -8,18 +8,24 @@ def updateServo():
     global height
     action = False  # Temp variable to replace the servo
     for i in range(200):
-        if not stopThread:
+        if stopThread:
+            break
+        else:
             # some action to get water height in some value
-            
+
             if height < 50:
-                action = True# Temp variable to replace the servo
+                action = True   # Temp variable to replace the servo
                 # Servo.setServo(0)
             else:
-                action = False# Temp variable to replace the servo
+                action = False  # Temp variable to replace the servo
                 # Servo.setServo(90)
             print(threading.currentThread().getName(), action)
-        else:
-            break
+
+            keys = input("Enter")
+            if keys == "S":
+                break
+            else:
+                height = keys
 
 t = threading.Thread(name="Thread1",target=updateServo)    #setting up a thread
 t.start()
