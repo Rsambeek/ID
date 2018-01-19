@@ -1,4 +1,4 @@
-# import Servo.py   #Uncomment all servo related code when using on raspberry pi
+import Servo   #Uncomment all servo related code when using on raspberry pi
 import threading
 
 height = 0
@@ -6,7 +6,6 @@ stopThread = False
 
 def updateServo():
     global height
-    action = False  # Temp variable to replace the servo
     for i in range(200):
         if stopThread:
             break
@@ -14,12 +13,10 @@ def updateServo():
             # some action to get water height in some value
 
             if height < 50:
-                action = True   # Temp variable to replace the servo
-                # Servo.setServo(0)
+                Servo.setServo(0)
             else:
-                action = False  # Temp variable to replace the servo
-                # Servo.setServo(90)
-            print(threading.currentThread().getName(), action)
+                Servo.setServo(90)
+            print(threading.currentThread().getName(), height)
 
             keys = input("Enter")
             if keys == "S":
@@ -30,4 +27,4 @@ def updateServo():
 t = threading.Thread(name="Thread1",target=updateServo)    #setting up a thread
 t.start()
 
-stopThread = True   # How to stop the threads
+# stopThread = True   # How to stop the threads
