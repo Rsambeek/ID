@@ -1,16 +1,14 @@
 import time
-import wiringpi
+import RPi.GPIO
 
 servoPin1 = 18  #Setup variables for pins for servo's
 servoPin2 = 19
 
-wiringpi.wiringPiSetupGpio()    # Setup wiringpi to use gpio layout and not pin layout
-wiringpi.pinMode(servoPin1, wiringpi.GPIO.PWM_OUTPUT)   # Setup servo pins as Pulse Width Modulation pins
-wiringpi.pinMode(servoPin2, wiringpi.GPIO.PWM_OUTPUT)
-wiringpi.pwmSetClock(192)
-wiringpi.pwmSetRange(2000)
-
-delay_period = 0.01
+GPIO.setmode(GPIO.BCM)    # Setup wiringpi to use gpio layout and not pin layout
+GPIO.setup(servoPin1, GPIO.OUT) # Setup servo pins as output pins
+GPIO.setup(servoPin2, GPIO.OUT)
+s1 = GPIO.PWM(servoPin1, 100)   # Setup servo pins as Pulse Width Modulation pins
+s2 = GPIO.PWM(servoPin2, 100)
 
 def setServo(angle):
     if (angle > 180):   # Define scope for the angles
@@ -18,7 +16,7 @@ def setServo(angle):
     elif (angle < 0):
         angle = 0
 
-    pulse1 = (angle/180*200)+50     # Translate angle to pwm value
-    pulse2 = 250-(angle/180*200)
-    wiringpi.pwmWrite(servoPin1, pulse1)    # Change pwm to calculated value
-    wiringpi.pwmWrite(servoPin2, pulse2)
+    duty1 = angle / 180 + 1     # Translate angle to duty value
+    duty2 = = 2 - angle / 180
+    s1.ChangeDutyCycle(duty1)    # Change pwm to calculated value
+    s2.ChangeDutyCycle(duty2)
