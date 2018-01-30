@@ -1,26 +1,62 @@
 import time
-from RPi import GPIO
+import wiringpi
+import socket
+import docker
+import os
+import MySQLdb
 
-GPIO.setwarnings(False)
 
-servoPin1 = 29  #Setup variables for pins for servo's
-servoPin2 = 31
-servoCheck1 = 33
-servoCheck2 = 35
+try:
+    node.attrs['Spec']['Labels']['inspectorgadget']
+except:
+    print("Label inspectorgadget not found\nCreating now")
+    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'inspectorgadget': 'True'}})
+
+try:
+    node.attrs['Spec']['Labels']['gatekeeper']
+except:
+    print("Label gatekeeper not found\nCreating now")
+    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'True'}})
+
+try:
+    node.attrs['Spec']['Labels']['gatereader']
+except:
+    print("Label gatekeeper not found\nCreating now")
+    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'gatereader'}})
+
+
+while True:     # Database connection loopst infinite times to make sure there is a connection
+    try:
+        db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes$')
+        dbCursor = db.cursor()
+        print("Database connection established")
+        break
+    except MySQLdb.Error:       # If for some reason there cant be a connection just pass the exception to retry
+        pass
+
+client = docker.from_env()	# Get current client
+node = client.nodes.get(socket.gethostname())   # get current node in docker swarm
+
+
+servoPin1 = 17  #Setup variables for pins for servo's
+servoPin2 = 18
+servoCheck1 = 29
+servoCheck2 = 31
 sensorTrigger = 32
-sensorEcho = 36
+sensorEcho = 35
 
-GPIO.setmode(GPIO.BOARD)    # Setup gpio to use pin layout
-GPIO.setup(servoPin1, GPIO.OUT) # Setup servo pins as output pins
-GPIO.setup(servoPin2, GPIO.OUT)
-GPIO.setup(servoCheck1, GPIO.IN)
-GPIO.setup(servoCheck2, GPIO.IN)
-GPIO.setup(sensorTrigger, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(sensorEcho, GPIO.IN)
-s1 = GPIO.PWM(servoPin1, 100)   # Setup servo pins as Pulse Width Modulation pins
-s2 = GPIO.PWM(servoPin2, 100)   # 100 indicates 100Hz so every cycle is 10 miliseconds
-s1.start(1)     #percentage of time per cycle that the pin is high
-s2.start(1)
+wiringpi.wiringPiSetupGpio()    # Setup gpio to use pin layout
+wiringpi.pinMode(servoPin1, wiringpi.GPIO.PWM_OUTPUT) # Setup servo pins as output pins
+wiringpi.pinMode(servoPin2, wiringpi.GPIO.PWM_OUTPUT)
+wiringpi.pinMode(servoCheck1, 0)
+wiringpi.pinMode(servoCheck2, 0)
+wiringpi.pinMode(sensorTrigger, 1)
+wiringpi.pinMode(sensorEcho, 0)
+
+wiringpi.pwmSetMode(wiringpi.GPIO.PWM_MODE_MS)
+wiringpi.pwmSetClock(192)
+wiringpi.pwmSetRange(2000)
+
 
 def setServo(angle):
     if (angle > 180):   # Define scope for the angles
@@ -28,25 +64,28 @@ def setServo(angle):
     elif (angle < 0):
         angle = 0
 
-    duty1 = angle / 180 + 1     # Translate angle to duty value
-    duty2 = 2 - angle / 180
-    s1.ChangeDutyCycle(duty1)    # Change pwm to calculated value
-    s2.ChangeDutyCycle(duty2)
+    pulse1 = (angle / 180)*200 + 50     # Translate angle to duty value
+    pulse2 = 250 - (angle / 180)*200
+    wiringpi.pwmWrite(servoPin1, pulse1)    # Change pwm to calculated value
+    wiringpi.pwmWrite(servoPin2, pulse2)
 
 def getServo():
+    s1 = 0
+    s2 = 0
     for i in range(50):
-        GPIO.input(servoCheck1)
-        GPIO.input(servoCheck2)
+        s1 += bin(wiringpi.digitalRead(servoCheck1))
+        s2 += bin(wiringpi.digitalRead(servoCheck2))
+    return [s1,s2]
 
 def checkDistance(distance):
-    GPIO.output(TRIG, GPIO.HIGH)
+    wiringpi.digitalWrite(TRIG, 1)
     time.sleep(0.00001)
-    GPIO.output(TRIG, GPIO.LOW)
+    wiringpi.digitalWrite(TRIG, 0)
 
-    while GPIO.input(ECHO)==0:
+    while wiringpi.digitalRead(ECHO)==0:
         pulse_start = time.time()
 
-    while GPIO.input(ECHO)==1:
+    while wiringpi.digitalRead(ECHO)==1:
         pulse_end = time.time()
 
     pulseTime = (pulse_end - (pulse_start/2))
