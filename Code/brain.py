@@ -20,7 +20,7 @@ while True:
             dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = inspectorgadget")
             interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
             if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
-                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+",Gatekeeper lost da wae)))
+                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Stopped inspecting sensor")))
                 node.update({'Availability': 'active', 'Name': 'Name': socket.gethostname(),'Role': 'manager','Labels': {'inspectorgadget':'False'}})
                 os.system('sudo reboot now')
 
@@ -32,8 +32,8 @@ while True:
             dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = gatekeeper")
             interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
             if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
-                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+",Gatekeeper lost da wae)))
-                node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'inspectorgadget':'False'}})
+                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Stoped reading gates")))
+                node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'gatereader':'False'}})
                 os.system('sudo reboot now')
 
 

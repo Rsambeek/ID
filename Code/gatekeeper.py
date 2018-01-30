@@ -27,6 +27,6 @@ while True:	# Infitly loop to update motor position
     dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = gatekeeper")
     interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
     if interventions > (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
-        dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+",Gatekeeper lost da wae)))
+        dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Gatekeeper lost da wae")))
         node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'gatekeeper':'False'}})
         os.system('sudo reboot now')
