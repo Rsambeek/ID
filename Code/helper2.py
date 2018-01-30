@@ -1,5 +1,42 @@
 import time
 import wiringpi
+import socket
+import docker
+import os
+import MySQLdb
+
+
+try:
+    node.attrs['Spec']['Labels']['inspectorgadget']
+except:
+    print("Label inspectorgadget not found\nCreating now")
+    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'inspectorgadget': 'True'}})
+
+try:
+    node.attrs['Spec']['Labels']['gatekeeper']
+except:
+    print("Label gatekeeper not found\nCreating now")
+    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'True'}})
+
+try:
+    node.attrs['Spec']['Labels']['gatereader']
+except:
+    print("Label gatekeeper not found\nCreating now")
+    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'gatereader'}})
+
+
+while True:     # Database connection loopst infinite times to make sure there is a connection
+    try:
+        db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes$')
+        dbCursor = db.cursor()
+        print("Database connection established")
+        break
+    except MySQLdb.Error:       # If for some reason there cant be a connection just pass the exception to retry
+        pass
+
+client = docker.from_env()	# Get current client
+node = client.nodes.get(socket.gethostname())   # get current node in docker swarm
+
 
 servoPin1 = 15  #Setup variables for pins for servo's
 servoPin2 = 16
@@ -34,8 +71,9 @@ def getServo():
     s1 = 0
     s2 = 0
     for i in range(50):
-        s1 += 1 if wiringpi.digitalRead(servoCheck1) else 0
-        s2 += 1 if wiringpi.digitalRead(servoCheck2) else 0
+        s1 += bin(wiringpi.digitalRead(servoCheck1))
+        s2 += bin(wiringpi.digitalRead(servoCheck2))
+    return [s1,s2]
 
 def checkDistance(distance):
     wiringpi.digitalWrite(TRIG, 1)
