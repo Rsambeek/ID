@@ -6,6 +6,9 @@ import os
 import MySQLdb
 
 
+client = docker.from_env()	# Get current client
+node = client.nodes.get(socket.gethostname())   # get current node in docker swarm
+
 try:
     node.attrs['Spec']['Labels']['inspectorgadget']
 except:
@@ -33,9 +36,6 @@ while True:     # Database connection loopst infinite times to make sure there i
         break
     except MySQLdb.Error:       # If for some reason there cant be a connection just pass the exception to retry
         pass
-
-client = docker.from_env()	# Get current client
-node = client.nodes.get(socket.gethostname())   # get current node in docker swarm
 
 
 servoPin1 = 17  #Setup variables for pins for servo's
