@@ -14,18 +14,21 @@ try:
 except:
     print("Label inspectorgadget not found\nCreating now")
     node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'inspectorgadget': 'True'}})
+    os.system('sudo reboot now')
 
 try:
     node.attrs['Spec']['Labels']['gatekeeper']
 except:
     print("Label gatekeeper not found\nCreating now")
     node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'True'}})
+    os.system('sudo reboot now')
 
 try:
     node.attrs['Spec']['Labels']['gatereader']
 except:
     print("Label gatekeeper not found\nCreating now")
     node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'gatereader'}})
+    os.system('sudo reboot now')
 
 
 while True:     # Database connection loopst infinite times to make sure there is a connection
