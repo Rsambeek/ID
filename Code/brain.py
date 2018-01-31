@@ -33,14 +33,15 @@ while True:
             if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
                 db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
                 dbCursor = db.cursor()
-                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Stopped inspecting sensor)"))
+                labels['inspectorgadget'] = 'False'
+                dbCursor.execute("INSERT INTO errors (Hostname, ErrorType) VALUES('{0}', ' Stoped inspecting sensor')".format(socket.gethostname()))
                 node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'inspectorgadget':'False'}})
                 os.system('sudo reboot now')
 
     if node.attrs['Spec']['Labels']['gatereader'] == 'True' and cycleIndex%2 == 1:
         servoPos = getServo()
         print(servoPos)
-        if servoPos[0] > 0 or servoPos[1] > 0:
+        if servoPos[0] == 0 or servoPos[1] == 0:
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
             dbCursor.execute("INSERT INTO interventions (Intervention) VALUES('gatekeeper')")
@@ -52,8 +53,9 @@ while True:
             if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
                 db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
                 dbCursor = db.cursor()
-                dbCursor.execute("INSERT INTO error (Hostname, ErrorType) VALUES('{0} Stoped reading gates')".format(socket.gethostname()))
-                node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'gatereader':'False'}})
+                labels['gatereader'] = 'False'
+                dbCursor.execute("INSERT INTO errors (Hostname, ErrorType) VALUES('{0}', ' Stoped reading gates')".format(socket.gethostname()))
+                node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': labels})
                 os.system('sudo reboot now')
 
     time.sleep(1)
