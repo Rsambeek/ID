@@ -9,26 +9,26 @@ import MySQLdb
 client = docker.from_env()	# Get current client
 node = client.nodes.get(socket.gethostname())   # get current node in docker swarm
 
-labelError = {}
+labelError = False
 
 try:
     print("Inspectorgadget: ", node.attrs['Spec']['Labels']['inspectorgadget'])
 except:
-    labelError['inspectorgadget'] 'True'
+    labelError = True
 
 try:
     print("Gatekeeper: ", node.attrs['Spec']['Labels']['gatekeeper'])
 except:
-    labelError['gatekeeper'] = 'True'
+    labelError = True
 
 try:
-    print("Gatereader: ", node.attrs['Spec']['Labels']['gatereader']
+    print("Gatereader: ", node.attrs['Spec']['Labels']['gatereader'])
 except:
-    labelError['gatereader'] = 'True'
+    labelError = True
 
-if len(labelError) > 0
-    print("Adding missing labels")
-    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': labelError})
+if labelError:
+    print("Resetting missing labels")
+    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'inspectorgadget': 'True', 'gatekeeper': 'True', 'gatereader': 'True'}})
     os.system('sudo reboot now')
 
 
