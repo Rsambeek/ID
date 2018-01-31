@@ -10,7 +10,7 @@ while True:
         cycleIndex = 1
 
     waterHeight = checkDistance(sensorHeight)
-    dbCursor.execute("INSERT INTO waterheight (value, GateDecision) VALUES ("waterHeight", 1 if "waterHeight" > "triggerHeight" else 0)")
+    dbCursor.execute("INSERT INTO waterheight (value, GateDecision) VALUES ("+waterHeight+", 1 if "+waterHeight+" > "+triggerHeight+" else 0)")
 
     time.sleep(2)
 
