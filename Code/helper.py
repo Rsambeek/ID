@@ -10,21 +10,21 @@ client = docker.from_env()	# Get current client
 node = client.nodes.get(socket.gethostname())   # get current node in docker swarm
 
 try:
-    node.attrs['Spec']['Labels']['inspectorgadget']
+    print("Inspectorgadget: ", node.attrs['Spec']['Labels']['inspectorgadget'])
 except:
     print("Label inspectorgadget not found\nCreating now")
     node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'inspectorgadget': 'True'}})
     os.system('sudo reboot now')
 
 try:
-    node.attrs['Spec']['Labels']['gatekeeper']
+    print("Gatekeeper: ", node.attrs['Spec']['Labels']['gatekeeper'])
 except:
     print("Label gatekeeper not found\nCreating now")
     node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'True'}})
     os.system('sudo reboot now')
 
 try:
-    node.attrs['Spec']['Labels']['gatereader']
+    print("Gatereader: ", node.attrs['Spec']['Labels']['gatereader']
 except:
     print("Label gatekeeper not found\nCreating now")
     node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'gatereader'}})
