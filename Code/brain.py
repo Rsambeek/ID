@@ -1,7 +1,7 @@
 from helper import *
 
 
-cycleIndex = 0
+cycleIndex = 10
 while True:
     if node.attrs['Spec']['Labels']['inspectorgadget'] == 'True' and cycleIndex%2 == 0:
         if cycleIndex == 10:

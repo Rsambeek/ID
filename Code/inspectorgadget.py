@@ -12,7 +12,7 @@ while True:
                 sensorHeight = data[1]
             elif data[0] == "trigger":
                 triggerHeight = data[1]
-        cycleIndex = 1
+        cycleIndex = 0
 
     waterHeight = checkDistance(sensorHeight)
     db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
