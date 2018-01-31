@@ -32,6 +32,7 @@ if labelError:
     os.system('sudo reboot now')
 
 
+pi = pigpio.pi()
 servoPin1 = 17  #Setup variables for pins for servo's
 servoPin2 = 18
 servoCheck1 = 29
