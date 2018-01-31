@@ -4,7 +4,7 @@ from helper2 import *
 cycleIndex = 0
 while True:
     if node.attrs['Spec']['Labels']['inspectorgadget'] == 'True' and cycleIndex%2 == 0:
-        if cycleIndex = 10
+        if cycleIndex == 10:
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
             dbCursor.execute("SELECT setting, value FROM settings WHERE setting = sensorHeight OR setting = trigger")
