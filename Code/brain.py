@@ -31,7 +31,7 @@ while True:
                 db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
                 dbCursor = db.cursor()
                 dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Stopped inspecting sensor)"))
-                node.update({'Availability': 'active', 'Name': 'Name': socket.gethostname(),'Role': 'manager','Labels': {'inspectorgadget':'False'}})
+                node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'inspectorgadget':'False'}})
                 os.system('sudo reboot now')
 
     if node.attrs['Spec']['Labels']['gatereader'] == 'True' and cycleIndex%2 == 1:
