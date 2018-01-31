@@ -24,11 +24,11 @@ while True:
         if inspectorgadgetDesision[1] != waterHeight or inspectorgadgetDesision[2] != (1 if waterHeight > triggerHeight else 0):
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
-            dbCursor.execute("INSERT INTO interventions (Intervention) VALUES(inspectorgadget)")
+            dbCursor.execute("INSERT INTO interventions (Intervention) VALUES('inspectorgadget')")
             time.sleep(10)
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
-            dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = inspectorgadget")
+            dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = 'inspectorgadget'")
             interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
             if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
                 db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
@@ -39,21 +39,22 @@ while True:
 
     if node.attrs['Spec']['Labels']['gatereader'] == 'True' and cycleIndex%2 == 1:
         servoPos = getServo()
+        print(servoPos)
         if servoPos[0] > 0 or servoPos[1] > 0:
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
-            dbCursor.execute("INSERT INTO interventions (Intervention) VALUES(gatekeeper)")
+            dbCursor.execute("INSERT INTO interventions (Intervention) VALUES('gatekeeper')")
             time.sleep(10)
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
-            dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = gatekeeper")
+            dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = 'gatekeeper'")
             interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
             if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
                 db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
                 dbCursor = db.cursor()
-                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Stoped reading gates)"))
+                dbCursor.execute("INSERT INTO error (Hostname, ErrorType) VALUES('{0} Stoped reading gates')".format(socket.gethostname()))
                 node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'gatereader':'False'}})
                 os.system('sudo reboot now')
 
-
     time.sleep(1)
+    cycleIndex +=1
