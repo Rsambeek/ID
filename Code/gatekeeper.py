@@ -9,7 +9,7 @@ print("Starting gate keeping")
 
 while True:	# Infitly loop to update motor position
 #for i in range(5): # Testing purposes only!
-    dbCursor.execute("SELECT MAX(Timestamp), GateDecision FROM waterheight")	# Get waterheight from database
+    dbCursor.execute("SELECT Timestamp, GateDecision FROM waterheight ORDER BY Timestamp DESC LIMIT 1")	# Get desired gate state from database
 
     for row in dbCursor.fetchall():	# Get latest height added to database
         gateState = bool(row[1])

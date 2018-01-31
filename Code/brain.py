@@ -12,7 +12,7 @@ while True:
         cycleIndex +=1
 
         waterHeight = checkDistance(sensorHeight)
-        dbCursor.execute("SELECT MAX(Timestamp), Value, GateDecision FROM waterheight")	# Get waterheight from database
+        dbCursor.execute("SELECT Timestamp, Value, GateDecision FROM waterheight ORDER BY Timestamp DESC LIMIT 1")	# Get waterheight from database
         inspectorgadgetDesision = dbCursor.fetchall()[1]
         if inspectorgadgetDesision[1] != waterHeight or inspectorgadgetDesision[2] != (1 if waterHeight > triggerHeight else 0):
             dbCursor.execute("INSERT INTO interventions (Intervention) VALUES(inspectorgadget)")
