@@ -35,10 +35,10 @@ if labelError:
 pi = pigpio.pi()
 servoPin1 = 17  #Setup variables for pins for servo's
 servoPin2 = 18
-servoCheck1 = 29
-servoCheck2 = 31
-sensorTrigger = 32
-sensorEcho = 33
+servoCheck1 = 21
+servoCheck2 = 22
+sensorTrigger = 23
+sensorEcho = 24
 pud = pigpio.PUD_DOWN   # if a high or a low should avtivate it
 
 pi.set_mode(servoCheck1, pigpio.INPUT)
