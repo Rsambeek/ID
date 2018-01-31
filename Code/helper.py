@@ -1,5 +1,5 @@
 import time
-import wiringpi
+import pigpio
 import socket
 import docker
 import os
