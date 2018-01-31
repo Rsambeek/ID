@@ -57,7 +57,7 @@ def setServo(angle):
     elif (angle < 0):
         angle = 0
 
-    pulse1 = (angle / 180)*1800 + 550     # Translate angle to duty value
+    pulse1 = (angle / 180)*1850 + 500     # Translate angle to duty value
     pulse2 = 2350 - (angle / 180)*1800
     pi.set_servo_pulsewidth(servoPin1, pulse1)    # Change pwm to calculated value
     pi.set_servo_pulsewidth(servoPin2, pulse2)

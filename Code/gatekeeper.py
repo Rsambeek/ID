@@ -22,7 +22,6 @@ while True:	# Infitly loop to update motor position
             setServo(90)
         print("Gate", gatestate(gateState))
 
-        time.sleep(2)
         break
 
 	# Get interventions from database to check if working correct
