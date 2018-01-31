@@ -3,7 +3,7 @@ from helper2 import *
 
 cycleIndex = 1
 while True:
-    if cycleIndex == 10
+    if cycleIndex == 10;
         dbCursor.execute("SELECT setting, value FROM settings WHERE setting = sensorHeight OR setting = trigger")
         sensorHeight = dbCursor.fetchall()[0][1]
         triggerHeight = dbCursor.fetchall()[1][1]
