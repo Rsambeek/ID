@@ -32,17 +32,6 @@ if labelError:
     os.system('sudo reboot now')
 
 
-while True:     # Database connection loopst infinite times to make sure there is a connection
-    try:
-        db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
-        dbCursor = db.cursor()
-        print("Database connection established")
-        break
-    except MySQLdb.Error:       # If for some reason there cant be a connection just pass the exception to retry
-        print("Retrying to establish connection")
-        pass
-
-
 servoPin1 = 17  #Setup variables for pins for servo's
 servoPin2 = 18
 servoCheck1 = 29

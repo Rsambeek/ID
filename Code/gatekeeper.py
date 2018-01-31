@@ -9,6 +9,8 @@ print("Starting gate keeping")
 
 while True:	# Infitly loop to update motor position
 #for i in range(5): # Testing purposes only!
+    db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
+    dbCursor = db.cursor()
     dbCursor.execute("SELECT Timestamp, GateDecision FROM waterheight ORDER BY Timestamp DESC LIMIT 1")	# Get desired gate state from database
 
     for row in dbCursor.fetchall():	# Get latest height added to database
@@ -24,9 +26,13 @@ while True:	# Infitly loop to update motor position
         break
 
 	# Get interventions from database to check if working correct
+    db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
+    dbCursor = db.cursor()
     dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = gatekeeper")
     interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
     if interventions > (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
+        db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
+        dbCursor = db.cursor()
         dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Gatekeeper lost da wae)"))
         node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'gatekeeper':'False'}})
         os.system('sudo reboot now')
