@@ -9,25 +9,26 @@ import MySQLdb
 client = docker.from_env()	# Get current client
 node = client.nodes.get(socket.gethostname())   # get current node in docker swarm
 
+labelError = {}
+
 try:
     print("Inspectorgadget: ", node.attrs['Spec']['Labels']['inspectorgadget'])
 except:
-    print("Label inspectorgadget not found\nCreating now")
-    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'inspectorgadget': 'True'}})
-    os.system('sudo reboot now')
+    labelError['inspectorgadget'] 'True'
 
 try:
     print("Gatekeeper: ", node.attrs['Spec']['Labels']['gatekeeper'])
 except:
-    print("Label gatekeeper not found\nCreating now")
-    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'True'}})
-    os.system('sudo reboot now')
+    labelError['gatekeeper'] = 'True'
 
 try:
     print("Gatereader: ", node.attrs['Spec']['Labels']['gatereader']
 except:
-    print("Label gatekeeper not found\nCreating now")
-    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': {'gatekeeper': 'gatereader'}})
+    labelError['gatereader'] = 'True'
+
+if len(labelError) > 0
+    print("Adding missing labels")
+    node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': labelError})
     os.system('sudo reboot now')
 
 
