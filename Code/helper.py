@@ -10,22 +10,27 @@ client = docker.from_env()	# Get current client
 node = client.nodes.get(socket.gethostname())   # get current node in docker swarm
 
 labels = {'inspectorgadget': 'True', 'gatekeeper': 'True', 'gatereader': 'True'}
+labelError = False
 
 try:
-    print("Inspectorgadget: ", node.attrs['Spec']['Labels']['inspectorgadget'])
+    labels['inspectorgadget'] = node.attrs['Spec']['Labels']['inspectorgadget']
 except:
+    labelError = True
     labels['inspectorgadget'] = 'False'
 
 try:
     print("Gatekeeper: ", node.attrs['Spec']['Labels']['gatekeeper'])
 except:
+    labelError = True
     labels['gatekeeper'] = 'False'
 
 try:
     print("Gatereader: ", node.attrs['Spec']['Labels']['gatereader'])
 except:
+    labelError = True
     labels['gatereader'] = 'False'
 
+print(labels)
 if labelError:
     print("Resetting missing labels")
     node.update({'Availability': 'active', 'Name': socket.gethostname(), 'Role': 'manager', 'Labels': lables})
