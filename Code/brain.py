@@ -30,7 +30,7 @@ while True:
             if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
                 db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
                 dbCursor = db.cursor()
-                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Stopped inspecting sensor")))
+                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Stopped inspecting sensor)""))
                 node.update({'Availability': 'active', 'Name': 'Name': socket.gethostname(),'Role': 'manager','Labels': {'inspectorgadget':'False'}})
                 os.system('sudo reboot now')
 
@@ -48,7 +48,7 @@ while True:
             if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
                 db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
                 dbCursor = db.cursor()
-                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Stoped reading gates")))
+                dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Stoped reading gates)""))
                 node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'gatereader':'False'}})
                 os.system('sudo reboot now')
 
