@@ -7,9 +7,12 @@ while True:
         if cycleIndex == 10:
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
-            dbCursor.execute("SELECT setting, value FROM settings WHERE setting = sensorHeight OR setting = trigger")
-            sensorHeight = dbCursor.fetchall()[0][1]
-            triggerHeight = dbCursor.fetchall()[1][1]
+            dbCursor.execute("SELECT setting, value FROM settings")
+            for data in dbCursor.fetchall():
+                if data[0] == "sensorHeight":
+                    sensorHeight = data[1]
+                elif data[0] == "trigger":
+                    triggerHeight = data[1]
             cycleIndex = 0
         cycleIndex +=1
 
