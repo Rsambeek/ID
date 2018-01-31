@@ -38,7 +38,7 @@ servoPin2 = 18
 servoCheck1 = 29
 servoCheck2 = 31
 sensorTrigger = 32
-sensorEcho = 35
+sensorEcho = 33
 pud = pigpio.PUD_DOWN   # if a high or a low should avtivate it
 
 pi.set_mode(servoCheck1, pigpio.INPUT)
