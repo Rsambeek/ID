@@ -71,14 +71,14 @@ def getServo():
     return [s1,s2]
 
 def checkDistance(distance):
-    pi.write(TRIG, 1)
+    pi.write(sensorTrigger, 1)
     time.sleep(0.00001)
-    pi.write(TRIG, 0)
+    pi.write(sensorTrigger, 0)
 
-    while pi.read(ECHO)==0:
+    while pi.read(sensorEcho)==0:
         pulse_start = time.time()
 
-    while pi.read(ECHO)==1:
+    while pi.read(sensorEcho)==1:
         pulse_end = time.time()
 
     pulseTime = (pulse_end - (pulse_start/2))
