@@ -24,7 +24,7 @@ while True:
     dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = inspectorgadget")
     interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
     if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
-        dbCursor.execute("INSERT INTO errors (Hostname, ErrorType) VALUES('{0},Inspectorgadget lost da wae)".format(socket.gethostname()))
+        dbCursor.execute("INSERT INTO errors (Hostname, ErrorType) VALUES('{0}','Inspectorgadget lost da wae)".format(socket.gethostname()))
         db.commit()
         node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': labels})
         os.system('sudo reboot now')
