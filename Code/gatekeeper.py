@@ -24,8 +24,9 @@ while True:	# Infitly loop to update motor position
 
         break
 
+    time.sleep(1)
 	# Get interventions from database to check if working correct
-    dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = gatekeeper")
+    dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = 'gatekeeper'")
     interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
     if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
         dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Gatekeeper lost da wae)"))

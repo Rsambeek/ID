@@ -23,8 +23,6 @@ while True:
             dbCursor.execute("INSERT INTO interventions (Intervention) VALUES('inspectorgadget')")
             db.commit()
             time.sleep(10)
-            db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
-            dbCursor = db.cursor()
             dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = 'inspectorgadget'")
             interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
             if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
