@@ -6,6 +6,8 @@ import os
 import MySQLdb
 
 
+os.system('sudo pigpiod')
+os.system('export PIGPIO_ADDR=soft, export PIGPIO_PORT=8888')
 client = docker.from_env()	# Get current client
 node = client.nodes.get(socket.gethostname())   # get current node in docker swarm
 
