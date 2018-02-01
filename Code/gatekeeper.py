@@ -25,13 +25,9 @@ while True:	# Infitly loop to update motor position
         break
 
 	# Get interventions from database to check if working correct
-    db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
-    dbCursor = db.cursor()
     dbCursor.execute("SELECT * FROM interventions WHERE  Timestamp >= NOW() - INTERVAL 10 SECOND AND Intervention = gatekeeper")
     interventions = len(dbCursor.fetchall())	# Get ammount of new interventions
     if interventions < (len(client.nodes.list())/2):    # If more interventions demote yourself from gatekeeper
-        db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
-        dbCursor = db.cursor()
         dbCursor.execute(str("INSERT INTO error (Hostname, ErrorType) VALUES("+socket.gethostname()+"Gatekeeper lost da wae)"))
         db.commit()
         node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': labels})
