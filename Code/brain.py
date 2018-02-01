@@ -25,6 +25,7 @@ while True:
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
             dbCursor.execute("INSERT INTO interventions (Intervention) VALUES('inspectorgadget')")
+            db.commit()
             time.sleep(10)
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
@@ -35,7 +36,9 @@ while True:
                 dbCursor = db.cursor()
                 labels['inspectorgadget'] = 'False'
                 dbCursor.execute("INSERT INTO errors (Hostname, ErrorType) VALUES('{0}', ' Stoped inspecting sensor')".format(socket.gethostname()))
-                node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': {'inspectorgadget':'False'}})
+                db.commit()
+                labels['inspectorgadget'] = 'False'
+                node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': labels})
                 os.system('sudo reboot now')
 
     if node.attrs['Spec']['Labels']['gatereader'] == 'True' and cycleIndex%2 == 1:
@@ -45,6 +48,7 @@ while True:
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
             dbCursor.execute("INSERT INTO interventions (Intervention) VALUES('gatekeeper')")
+            db.commit()
             time.sleep(10)
             db = MySQLdb.connect(host='den1.mysql1.gear.host', user='waterratjes', passwd='Ke3Yq_h_Z478',db='waterratjes')
             dbCursor = db.cursor()
@@ -55,6 +59,8 @@ while True:
                 dbCursor = db.cursor()
                 labels['gatereader'] = 'False'
                 dbCursor.execute("INSERT INTO errors (Hostname, ErrorType) VALUES('{0}', ' Stoped reading gates')".format(socket.gethostname()))
+                db.commit()
+                labels['gatereader'] = 'False'
                 node.update({'Availability': 'active', 'Name': socket.gethostname(),'Role': 'manager','Labels': labels})
                 os.system('sudo reboot now')
 

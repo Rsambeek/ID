@@ -19,13 +19,13 @@ except:
     labels['inspectorgadget'] = 'False'
 
 try:
-    print("Gatekeeper: ", node.attrs['Spec']['Labels']['gatekeeper'])
+    labels['gatekeeper'] = node.attrs['Spec']['Labels']['gatekeeper']
 except:
     labelError = True
     labels['gatekeeper'] = 'False'
 
 try:
-    print("Gatereader: ", node.attrs['Spec']['Labels']['gatereader'])
+    labels['gatereader'] = node.attrs['Spec']['Labels']['gatereader']
 except:
     labelError = True
     labels['gatereader'] = 'False'
